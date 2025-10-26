@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}All Flashcards{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold mb-0">All Flashcards</h1>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0 align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">Front</th>
+                    <th scope="col">Back</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for flashcard in flashcards %}
+                    {% if not flashcard.hidden %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'flashcard-detail' flashcard.pk %}"
+                                   class="text-decoration-none">
+                                    {{ flashcard.front }}
+                                </a>
+                            </td>
+                            <td>{{ flashcard.back|truncatewords:20 }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'flashcard-update' flashcard.pk %}"
+                                   class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <a href="{% url 'flashcard-delete' flashcard.pk %}"
+                                   class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                            No flashcards found. <a href="{% url 'flashcard-create' %}">Create
+                            one</a>.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

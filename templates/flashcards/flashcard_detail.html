@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Flashcard Details{% endblock %}
+
+{% block content %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="h4 fw-bold mb-3">{{ flashcard.front }}</h1>
+            <p class="fs-5 text-muted">{{ flashcard.back }}</p>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between">
+        <div>
+            <a href="{% url 'flashcard-list' %}" class="btn btn-outline-secondary">←
+                Back to List</a>
+        </div>
+        <div>
+            <a href="{% url 'flashcard-update' flashcard.pk %}"
+               class="btn btn-primary me-2">Edit</a>
+            <a href="{% url 'flashcard-delete' flashcard.pk %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+{% endblock %}
