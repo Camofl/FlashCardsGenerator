@@ -27,6 +27,7 @@
                                 </a>
                             </td>
                             <td>{{ flashcard.back|truncatewords:20 }}</td>
+                            <td>{{ flashcard.created_by }}</td>
                             <td class="text-end">
                                 <a href="{% url 'flashcard-update' flashcard.pk %}"
                                    class="btn btn-sm btn-outline-primary me-1">Edit</a>
