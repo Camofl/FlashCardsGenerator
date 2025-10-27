@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-{% block title %}{% if view.object %}Edit Flashcard{% else %}New Flashcard
-{% endif %}{% endblock %}
-
 {% block content %}
     <div class="card shadow-sm">
         <div class="card-body">
@@ -11,7 +8,7 @@
                     Flashcard{% endif %}
             </h1>
 
-            <form method="post" novalidate>
+            <form method="post" novalidate id="flashcard-form">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="id_front" class="form-label">Front (Question)</label>
@@ -19,8 +16,26 @@
                 </div>
                 <div class="mb-3">
                     <label for="id_back" class="form-label">Back (Answer)</label>
-                    {{ form.back|add_class:"form-control" }}
+                    <div class="d-flex gap-2 align-items-start">
+                        {{ form.back|add_class:"form-control flex-grow-1" }}
+                        <div class="d-flex flex-column">
+                            <select id="api-select" class="form-select mb-2"
+                                    style="min-width: 150px;">
+                                <option value="freedictionary" selected>Free
+                                    Dictionary
+                                </option>
+                                <option value="wordsapi">WordsAPI</option>
+                                <option value="wordnik">Wordnik</option>
+                            </select>
+                            <button type="button" class="btn btn-outline-primary"
+                                    id="get-definition-btn">
+                                Get Definition
+                            </button>
+                        </div>
+                    </div>
+                    <small id="definition-status" class="text-muted"></small>
                 </div>
+
                 <div class="mb-3 form-check">
                     {{ form.hidden|add_class:"form-check-input" }}
                     <label for="id_hidden" class="form-check-label">Hidden</label>
@@ -37,4 +52,38 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.getElementById("get-definition-btn").addEventListener("click", async () => {
+            const word = document.getElementById("id_front").value.trim();
+            const api = document.getElementById("api-select").value;
+            const statusEl = document.getElementById("definition-status");
+            const backEl = document.getElementById("id_back");
+
+            if (!word) {
+                statusEl.textContent = "Please enter a word first.";
+                return;
+            }
+
+            statusEl.textContent = "Fetching definition...";
+
+            const response = await fetch("{% url 'get-definition' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({word, api})
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.definition) {
+                backEl.value = data.definition;
+                statusEl.textContent = `Definition loaded from ${api}. You can edit it before saving.`;
+            } else {
+                statusEl.textContent = data.error || "No definition found.";
+            }
+        });
+    </script>
 {% endblock %}
