@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                 {% for flashcard in flashcards %}
-                    {% if not flashcard.hidden %}
+                    {% if not flashcard.hidden  or flashcard.created_by == request.user %}
                         <tr>
                             <td>
                                 <a href="{% url 'flashcard-detail' flashcard.pk %}"

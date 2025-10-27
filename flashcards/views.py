@@ -1,3 +1,4 @@
+from django import forms
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
 from django.urls import reverse_lazy
@@ -21,6 +22,9 @@ class FlashcardCreateView(CreateView):
     template_name = "flashcards/flashcard_form.html"
     fields = ["front", "back", "hidden"]
     success_url = reverse_lazy("flashcard-list")
+    widgets = {
+        'hidden': forms.CheckboxInput(),
+    }
 
 
 class FlashcardUpdateView(UpdateView):
@@ -28,6 +32,9 @@ class FlashcardUpdateView(UpdateView):
     template_name = "flashcards/flashcard_form.html"
     fields = ["front", "back", "hidden"]
     success_url = reverse_lazy("flashcard-list")
+    widgets = {
+        'hidden': forms.CheckboxInput(),
+    }
 
 
 class FlashcardDeleteView(DeleteView):
