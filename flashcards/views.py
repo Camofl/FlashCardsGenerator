@@ -57,19 +57,35 @@ class FlashcardDeleteView(DeleteView):
     template_name = "flashcards/flashcard_confirm_delete.html"
     success_url = reverse_lazy("flashcard-list")
 
-
 @method_decorator(csrf_exempt, name="dispatch")
 class GetDefinitionView(View):
     def post(self, request, *args, **kwargs):
         import json
         data = json.loads(request.body)
-        word = data.get("word")
-        api = data.get("api", "freedictionary")  # default to Free Dictionary
+        word_raw = data.get("word", "").strip()
+        api = data.get("api", "freedictionary")
 
-        if not word:
+        if not word_raw:
             return JsonResponse({"error": "No word provided"}, status=400)
 
-        definition = DictionaryAPI.get_definition(word, api=api)
+        # --- Detect part(s) of speech ---
+        preferred_pos = []
+        word = word_raw
+
+        if word_raw.lower().startswith("to "):
+            preferred_pos = ["verb"]
+            word = word_raw[3:]  # remove "to "
+        elif word_raw.lower().startswith("the "):
+            preferred_pos = ["noun"]
+            word = word_raw[4:]  # remove "the "
+        else:
+            preferred_pos = ["adjective", "adverb"]
+
+        definition = DictionaryAPI.get_definition(
+            word=word,
+            api=api,
+            preferred_pos=preferred_pos
+        )
 
         if definition:
             return JsonResponse({"definition": definition})
