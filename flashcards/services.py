@@ -24,8 +24,13 @@ class FreeDictionaryAPI:
 
             first_entry = entries[0]
             phonetic = first_entry.get("phonetic", "")
+            if not phonetic:
+                for phonetic_entry in first_entry.get("phonetics", ""):
+                    if phonetic_entry.get("text", ""):
+                        phonetic = phonetic_entry.get("text", "")
+                        break
             if phonetic:
-                parts.append(phonetic)
+                parts.append(phonetic + "\n")
 
             all_meanings = []
             for entry in entries:
@@ -43,7 +48,7 @@ class FreeDictionaryAPI:
             for meaning in filtered_meanings:
                 pos = meaning.get("partOfSpeech")
                 if pos:
-                    parts.append(f"\n{pos}:\n")
+                    parts.append(f"{pos}:\n")
 
                 for i, d in enumerate(meaning.get("definitions", [])[:3], start=1):
                     definition = d.get("definition", "")

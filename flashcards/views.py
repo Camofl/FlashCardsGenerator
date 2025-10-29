@@ -58,7 +58,6 @@ class FlashcardDeleteView(DeleteView):
     template_name = "flashcards/flashcard_confirm_delete.html"
     success_url = reverse_lazy("flashcard-list")
 
-@method_decorator(csrf_exempt, name="dispatch")
 class GetDefinitionView(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
