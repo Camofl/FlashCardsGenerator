@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Cleanup and bug fix">
-      <change beforePath="$PROJECT_DIR$/flashcards/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/flashcards/services.py" afterDir="false" />
+    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Add phonetic fallback">
       <change beforePath="$PROJECT_DIR$/flashcards/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/flashcards/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +113,7 @@
       <option name="presentableId" value="Default" />
       <updated>1760446346198</updated>
       <workItem from="1760446347214" duration="3574000" />
-      <workItem from="1761484642341" duration="25214000" />
+      <workItem from="1761484642341" duration="26534000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -172,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761696985213</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Add phonetic fallback">
+      <option name="closed" value="true" />
+      <created>1761698218974</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1761698218974</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,6 +204,7 @@
     <MESSAGE value="Add API call" />
     <MESSAGE value="Decide between different  parts of speech" />
     <MESSAGE value="Cleanup and bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleanup and bug fix" />
+    <MESSAGE value="Add phonetic fallback" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add phonetic fallback" />
   </component>
 </project>
