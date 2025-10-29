@@ -30,10 +30,13 @@
                             <td>{{ flashcard.back|truncatewords:20 }}</td>
                             <td>{{ flashcard.created_by }}</td>
                             <td class="text-end">
-                                <a href="{% url 'flashcard-update' flashcard.pk %}"
-                                   class="btn btn-sm btn-outline-primary me-1">Edit</a>
-                                <a href="{% url 'flashcard-delete' flashcard.pk %}"
-                                   class="btn btn-sm btn-outline-danger">Delete</a>
+                                {% if flashcard.created_by == None or flashcard.created_by == request.user %}
+                                    <a href="{% url 'flashcard-update' flashcard.pk %}"
+                                       class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                    <a href="{% url 'flashcard-delete' flashcard.pk %}"
+                                       class="btn btn-sm btn-outline-danger">Delete</a>
+                                {% endif %}
+
                             </td>
                         </tr>
                     {% endif %}
