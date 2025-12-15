@@ -2,6 +2,7 @@ import json
 
 from django import forms
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
@@ -67,24 +68,30 @@ class GetDefinitionView(View):
         if not word_raw:
             return JsonResponse({"error": "No word provided"}, status=400)
 
-        word = word_raw
-
-        if word_raw.lower().startswith("to "):
-            preferred_pos = ["verb"]
-            word = word_raw[3:]
-        elif word_raw.lower().startswith("the "):
-            preferred_pos = ["noun"]
-            word = word_raw[4:]
-        else:
-            preferred_pos = ["pronoun", "adjective", "adverb", "preposition",
-                             "conjunction", "interjection"]
-
-        definition = DictionaryAPI.get_definition(
-            word=word,
-            api=api,
-            preferred_pos=preferred_pos
-        )
+        definition = fetch_definition_helper(word_raw, api=api)
 
         if definition:
             return JsonResponse({"definition": definition})
         return JsonResponse({"error": "No definition found"}, status=404)
+
+
+def get_preferred_pos(word):
+    if word.lower().startswith("to "):
+        preferred_pos = ["verb"]
+        word = word[3:]
+    elif word.lower().startswith("the "):
+        preferred_pos = ["noun"]
+        word = word[4:]
+    else:
+        preferred_pos = ["pronoun", "adjective", "adverb", "preposition",
+                         "conjunction", "interjection"]
+    return word, preferred_pos
+
+
+def fetch_definition_helper(word, api="freedictionary"):
+    preferred_pos = get_preferred_pos(word)
+    return DictionaryAPI.get_definition(
+        word=word,
+        api=api,
+        preferred_pos=preferred_pos,
+    )
