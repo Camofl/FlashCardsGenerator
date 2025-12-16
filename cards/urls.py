@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views.flashcards import *
 
 urlpatterns = [
     path("", FlashcardListView.as_view(), name="flashcard-list"),
