@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="h4 fw-bold mb-3">Review and generate backs</h1>
+
+            <div class="d-flex gap-2 align-items-end mb-3">
+                <div style="width: 260px;">
+                    <label class="form-label">API</label>
+                    <select id="api-select" class="form-select">
+                        <option value="freedictionary" selected>Free Dictionary</option>
+                        <option value="notimp">NotImplemented</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn btn-outline-primary" id="generate-btn">
+                    Generate backs
+                </button>
+                <small id="gen-status" class="text-muted"></small>
+            </div>
+
+            <form method="post" id="bulk-form" novalidate>
+                {% csrf_token %}
+                {{ formset.management_form }}
+
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                        <tr>
+                            <th style="width: 35%;">Front</th>
+                            <th>Back</th>
+                            <th style="width: 110px;">Hidden</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for form in formset %}
+                            <tr>
+                                <td>{{ form.front|add_class:"form-control js-front" }}</td>
+                                <td>{{ form.back|add_class:"form-control js-back" }}</td>
+                                <td class="text-center">{{ form.hidden|add_class:"form-check-input" }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <a href="{% url 'flashcard-bulk-paste' %}"
+                       class="btn btn-outline-secondary">Back</a>
+                    <button type="submit" class="btn btn-primary">Confirm and create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const statusEl = document.getElementById("gen-status");
+        const apiSelect = document.getElementById("api-select");
+
+        document.getElementById("generate-btn").addEventListener("click", async () => {
+            const fronts = Array.from(document.querySelectorAll(".js-front")).map(el => el.value.trim());
+            const backs = Array.from(document.querySelectorAll(".js-back"));
+            const api = apiSelect.value;
+
+            // Only generate for rows where back is empty (keeps user edits)
+            const wordsToSend = [];
+            const indexMap = []; // map response index -> form row index
+            fronts.forEach((w, i) => {
+                if (w && !backs[i].value.trim()) {
+                    wordsToSend.push(w);
+                    indexMap.push(i);
+                }
+            });
+
+            if (!wordsToSend.length) {
+                statusEl.textContent = "Nothing to generate (all backs already filled).";
+                return;
+            }
+
+            statusEl.textContent = `Generating ${wordsToSend.length}...`;
+
+            const resp = await fetch("{% url 'get-definitions-bulk' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({api, words: wordsToSend})
+            });
+
+            const data = await resp.json();
+
+            if (!resp.ok || !data.definitions) {
+                statusEl.textContent = data.error || "Generation failed.";
+                return;
+            }
+
+            data.definitions.forEach((def, j) => {
+                const rowIndex = indexMap[j];
+                if (rowIndex !== undefined) backs[rowIndex].value = def || "";
+            });
+
+            statusEl.textContent = `Done. Filled ${data.definitions.length} backs (editable).`;
+        });
+    </script>
+{% endblock %}
