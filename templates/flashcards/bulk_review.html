@@ -23,6 +23,7 @@
             <form method="post" id="bulk-form" novalidate>
                 {% csrf_token %}
                 {{ formset.management_form }}
+                {{ formset.non_form_errors }}
 
                 <div class="table-responsive">
                     <table class="table align-middle">
@@ -36,8 +37,23 @@
                         <tbody>
                         {% for form in formset %}
                             <tr>
-                                <td>{{ form.front|add_class:"form-control js-front" }}</td>
-                                <td>{{ form.back|add_class:"form-control js-back" }}</td>
+                                <td>
+                                    {{ form.front|add_class:"form-control js-front"|add_error_class:"is-invalid" }}
+                                    {% for e in form.front.errors %}
+                                        <div class="invalid-feedback">{{ e }}</div>
+                                    {% endfor %}
+                                </td>
+
+                                <td>
+                                    {{ form.back|add_class:"form-control js-back"|add_error_class:"is-invalid" }}
+                                    {% for e in form.back.errors %}
+                                        <div class="invalid-feedback">{{ e }}</div>
+                                    {% endfor %}
+                                    {% for e in form.non_field_errors %}
+                                        <div class="invalid-feedback d-block">{{ e }}</div>
+                                    {% endfor %}
+                                </td>
+
                                 <td class="text-center">{{ form.hidden|add_class:"form-check-input" }}</td>
                             </tr>
                         {% endfor %}
