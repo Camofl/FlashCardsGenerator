@@ -27,7 +27,7 @@
                                     {{ deck.name }}
                                 </a>
                             </td>
-                            <td>{{ deck.flashcards|truncatewords:20 }}</td>
+                            <td>{{ deck.flashcards_preview|truncatewords:20 }}</td>
                             <td>{{ deck.created_by }}</td>
                             <td class="text-end">
                                 {% if deck.created_by == None or deck.created_by == request.user %}

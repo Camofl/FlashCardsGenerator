@@ -14,35 +14,84 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-semibold text-primary"
-           href="{% url 'flashcard-list' %}">💡 FlashCards</a>
+           href="{% url 'flashcard-list' %}">
+            💡 FlashCards
+        </a>
+
+        <a class="navbar-brand fw-semibold text-success mb-0"
+           href="{% url 'deck-list' %}">
+            🗂️ Decks
+        </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+            <div class="navbar-nav me-auto gap-2 mt-3 mt-lg-0">
+                {% if user.is_authenticated %}
                     <a href="{% url 'flashcard-create' %}" class="btn btn-primary">
-                        + One
+                        + Flashcard
                     </a>
+
                     <a href="{% url 'flashcard-bulk-paste' %}" class="btn btn-primary">
                         + Multiple
                     </a>
-                </li>
-            </ul>
+
+                    <a href="{% url 'deck-create' %}" class="btn btn-success">
+                        + Deck
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                {% if user.is_authenticated %}
+                    <span class="text-muted small">
+                        Logged in as <strong>{{ user.username }}</strong>
+                    </span>
+
+                    <form method="post" action="{% url 'logout' %}"
+                          class="d-inline mb-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger">
+                            Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-secondary">
+                        Login
+                    </a>
+                    <a href="{% url 'signup' %}" class="btn btn-primary">
+                        Sign up
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </nav>
 
 <main class="flex-grow-1 py-4">
     <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
+                     role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
         {% block content %}{% endblock %}
     </div>
 </main>
 
 <footer class="bg-white border-top py-3 mt-auto">
     <div class="container text-center text-muted small">
-        &copy; {{ now|date:"Y" }} FlashCards Generator - Alfred Weickert
+        &copy; {% now "Y" %} FlashCards Generator - Alfred Weickert
     </div>
 </footer>
 

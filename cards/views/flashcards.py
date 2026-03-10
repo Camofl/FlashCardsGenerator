@@ -2,6 +2,7 @@ import json
 
 from django import forms
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import formset_factory
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -27,15 +28,21 @@ class FlashcardDetailView(DetailView):
     context_object_name = "flashcard"
 
 
-class FlashcardCreateView(CreateView):
+class OwnerRequiredMixin(LoginRequiredMixin):
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
+
+
+class FlashcardCreateView(LoginRequiredMixin, CreateView):
     model = Flashcard
     template_name = "cards/flashcards/form.html"
     fields = ["front", "back", "hidden"]
     success_url = reverse_lazy("flashcard-list")
-    widgets = {'hidden': forms.CheckboxInput()}
+    widgets = {"hidden": forms.CheckboxInput()}
 
     def form_valid(self, form):
         flashcard = form.save(commit=False)
+        flashcard.created_by = self.request.user
 
         if not flashcard.back and flashcard.front:
             definition = DictionaryAPI.get_definition(flashcard.front, api="wordsapi")
@@ -44,25 +51,28 @@ class FlashcardCreateView(CreateView):
             else:
                 flashcard.back = "[No definition found]"
 
-        return super().form_valid(form)
+        flashcard.save()
+        self.object = flashcard
+        return redirect(self.get_success_url())
 
 
-class FlashcardUpdateView(UpdateView):
+class FlashcardUpdateView(OwnerRequiredMixin, UpdateView):
     model = Flashcard
     template_name = "cards/flashcards/form.html"
     fields = ["front", "back", "hidden"]
     success_url = reverse_lazy("flashcard-list")
     widgets = {
-        'hidden': forms.CheckboxInput(),
+        "hidden": forms.CheckboxInput(),
     }
 
 
-class FlashcardDeleteView(DeleteView):
+class FlashcardDeleteView(OwnerRequiredMixin, DeleteView):
     model = Flashcard
     template_name = "cards/flashcards/confirm_delete.html"
     success_url = reverse_lazy("flashcard-list")
 
-class GetDefinitionView(View):
+
+class GetDefinitionView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         word_raw = data.get("word", "").strip()
@@ -100,7 +110,7 @@ def fetch_definition_helper(word, api="freedictionary"):
     )
 
 
-class BulkPasteView(View):
+class BulkPasteView(LoginRequiredMixin, View):
     template_name = "cards/flashcards/bulk_paste.html"
     session_key = "bulk_flashcard_fronts"
 
@@ -124,7 +134,7 @@ class BulkPasteView(View):
         return redirect("flashcard-bulk-review")
 
 
-class BulkReviewCreateView(View):
+class BulkReviewCreateView(LoginRequiredMixin, View):
     template_name = "cards/flashcards/bulk_review.html"
     session_key = "bulk_flashcard_fronts"
 
@@ -148,7 +158,6 @@ class BulkReviewCreateView(View):
 
         row_formset = formset_factory(BulkFlashcardRowForm, extra=0)
         initial = [{"front": w, "back": "", "hidden": False} for w in words]
-
         formset = row_formset(request.POST, initial=initial)
 
         if not formset.is_valid():
@@ -175,7 +184,7 @@ class BulkReviewCreateView(View):
         return redirect("flashcard-list")
 
 
-class BulkGetDefinitionsView(View):
+class BulkGetDefinitionsView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body or "{}")
         api = data.get("api", "freedictionary")

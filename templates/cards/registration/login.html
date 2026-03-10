@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Login | FlashCards Generator{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold mb-2">Welcome back</h2>
+                        <p class="text-muted mb-0">Log in to manage your flashcards and
+                            decks.</p>
+                    </div>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}"
+                                   class="form-label">
+                                Username
+                            </label>
+                            <input
+                                    type="text"
+                                    name="{{ form.username.html_name }}"
+                                    id="{{ form.username.id_for_label }}"
+                                    class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                                    value="{{ form.username.value|default:'' }}"
+                                    autofocus
+                            >
+                            {% for error in form.username.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}"
+                                   class="form-label">
+                                Password
+                            </label>
+                            <input
+                                    type="password"
+                                    name="{{ form.password.html_name }}"
+                                    id="{{ form.password.id_for_label }}"
+                                    class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                            >
+                            {% for error in form.password.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {% if next %}
+                            <input type="hidden" name="next" value="{{ next }}">
+                        {% endif %}
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Log in
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center mb-0 text-muted">
+                        No account yet?
+                        <a href="{% url 'signup' %}" class="text-decoration-none">Create
+                            one</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

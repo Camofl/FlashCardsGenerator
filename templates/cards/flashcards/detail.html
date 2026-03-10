@@ -14,10 +14,13 @@
             <a href="{% url 'flashcard-list' %}" class="btn btn-outline-secondary">←
                 Back to List</a>
         </div>
-        <div>
-            <a href="{% url 'flashcard-update' flashcard.pk %}"
-               class="btn btn-primary me-2">Edit</a>
-            <a href="{% url 'flashcard-delete' flashcard.pk %}" class="btn btn-danger">Delete</a>
-        </div>
+        {% if flashcard.created_by == None or flashcard.created_by == request.user %}
+            <div>
+                <a href="{% url 'flashcard-update' flashcard.pk %}"
+                   class="btn btn-primary me-2">Edit</a>
+                <a href="{% url 'flashcard-delete' flashcard.pk %}"
+                   class="btn btn-danger">Delete</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

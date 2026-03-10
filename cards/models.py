@@ -25,3 +25,7 @@ class Deck(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def flashcards_preview(self):
+        return ", ".join(card.front for card in self.flashcards.all())
