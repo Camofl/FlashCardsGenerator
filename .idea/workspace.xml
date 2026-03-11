@@ -4,18 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Implement basic decks">
-      <change afterPath="$PROJECT_DIR$/cards/views/signup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cards/registration/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cards/registration/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlashCardsGenerator/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlashCardsGenerator/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlashCardsGenerator/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlashCardsGenerator/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cards/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cards/views/flashcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/views/flashcards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cards/decks/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/decks/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cards/flashcards/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/detail.html" afterDir="false" />
+    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Implement authorization">
+      <change beforePath="$PROJECT_DIR$/cards/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/views/decks.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/views/decks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cards/decks/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/decks/detail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,7 +129,7 @@
       <workItem from="1760446347214" duration="3574000" />
       <workItem from="1761484642341" duration="26534000" />
       <workItem from="1771460523471" duration="3180000" />
-      <workItem from="1773152203058" duration="5404000" />
+      <workItem from="1773152203058" duration="10477000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -226,7 +219,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765925625904</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Implement authorization">
+      <option name="closed" value="true" />
+      <created>1773160042714</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1773160042714</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -255,6 +256,7 @@
     <MESSAGE value="Show form errors to user" />
     <MESSAGE value="Refactor project structure" />
     <MESSAGE value="Implement basic decks" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement basic decks" />
+    <MESSAGE value="Implement authorization" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement authorization" />
   </component>
 </project>
