@@ -21,6 +21,6 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('flashcards/', include("flashcards.urls")),
+    path('flashcards/', include("cards.urls")),
     path('', RedirectView.as_view(url='/flashcards/')),
 ]

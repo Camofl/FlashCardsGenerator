@@ -10,26 +10,26 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
 
-from .forms import BulkFlashcardRowForm
-from .models import Flashcard
-from .services import DictionaryAPI
+from ..forms import BulkFlashcardRowForm
+from ..models import Flashcard
+from ..services import DictionaryAPI
 
 
 class FlashcardListView(ListView):
     model = Flashcard
-    template_name = "flashcards/flashcard_list.html"
+    template_name = "cards/flashcards/list.html"
     context_object_name = "flashcards"
 
 
 class FlashcardDetailView(DetailView):
     model = Flashcard
-    template_name = "flashcards/flashcard_detail.html"
+    template_name = "cards/flashcards/detail.html"
     context_object_name = "flashcard"
 
 
 class FlashcardCreateView(CreateView):
     model = Flashcard
-    template_name = "flashcards/flashcard_form.html"
+    template_name = "cards/flashcards/form.html"
     fields = ["front", "back", "hidden"]
     success_url = reverse_lazy("flashcard-list")
     widgets = {'hidden': forms.CheckboxInput()}
@@ -49,7 +49,7 @@ class FlashcardCreateView(CreateView):
 
 class FlashcardUpdateView(UpdateView):
     model = Flashcard
-    template_name = "flashcards/flashcard_form.html"
+    template_name = "cards/flashcards/form.html"
     fields = ["front", "back", "hidden"]
     success_url = reverse_lazy("flashcard-list")
     widgets = {
@@ -59,7 +59,7 @@ class FlashcardUpdateView(UpdateView):
 
 class FlashcardDeleteView(DeleteView):
     model = Flashcard
-    template_name = "flashcards/flashcard_confirm_delete.html"
+    template_name = "cards/flashcards/confirm_delete.html"
     success_url = reverse_lazy("flashcard-list")
 
 class GetDefinitionView(View):
@@ -101,7 +101,7 @@ def fetch_definition_helper(word, api="freedictionary"):
 
 
 class BulkPasteView(View):
-    template_name = "flashcards/bulk_paste.html"
+    template_name = "cards/flashcards/bulk_paste.html"
     session_key = "bulk_flashcard_fronts"
 
     def get(self, request, *args, **kwargs):
@@ -125,7 +125,7 @@ class BulkPasteView(View):
 
 
 class BulkReviewCreateView(View):
-    template_name = "flashcards/bulk_review.html"
+    template_name = "cards/flashcards/bulk_review.html"
     session_key = "bulk_flashcard_fronts"
 
     def _get_words(self, request):
