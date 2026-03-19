@@ -29,30 +29,43 @@
 
                 <div class="mb-3">
                     <label for="id_back" class="form-label">Back (Answer)</label>
-                    <div class="d-flex gap-2 align-items-start">
-                        <div class="flex-grow-1">
+                    <div class="row g-2">
+                        <div class="col-lg-8">
                             {{ form.back|add_class:"form-control"|add_error_class:"is-invalid" }}
                             {% for e in form.back.errors %}
                                 <div class="invalid-feedback">{{ e }}</div>
                             {% endfor %}
                         </div>
 
-                        <div class="d-flex flex-column flex-grow-0"
-                             style="flex-basis: 220px;">
-                            <select id="api-select" class="form-select mb-2">
-                                <option value="freedictionary" selected>Free
-                                    Dictionary
-                                </option>
-                                <option value="notimp">NotImplemented</option>
-                                <option value="notimpl">NotImplemented</option>
-                            </select>
-                            <button type="button" class="btn btn-outline-primary"
+                        <div class="col-lg-4">
+                            <div class="mb-2">
+                                <label for="api-select" class="form-label">API</label>
+                                <select id="api-select" class="form-select">
+                                    <option value="freedictionary" selected>Free
+                                        Dictionary
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="language-select"
+                                       class="form-label">Language</label>
+                                <select id="language-select" class="form-select">
+                                    <option value="en" selected>English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="btn btn-outline-primary w-100"
                                     id="get-definition-btn">
                                 Get Definition
                             </button>
                         </div>
                     </div>
-                    <small id="definition-status" class="text-muted"></small>
+                    <small id="definition-status"
+                           class="text-muted d-block mt-2"></small>
                 </div>
 
                 <div class="mb-3 form-check">
@@ -76,35 +89,50 @@
     </div>
 
     <script>
-        document.getElementById("get-definition-btn").addEventListener("click", async () => {
-            const word = document.getElementById("id_front").value.trim();
-            const api = document.getElementById("api-select").value;
-            const statusEl = document.getElementById("definition-status");
-            const backEl = document.getElementById("id_back");
+        const getDefinitionBtn = document.getElementById("get-definition-btn");
+        const frontEl = document.getElementById("id_front");
+        const backEl = document.getElementById("id_back");
+        const apiEl = document.getElementById("api-select");
+        const languageEl = document.getElementById("language-select");
+        const statusEl = document.getElementById("definition-status");
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        getDefinitionBtn.addEventListener("click", async () => {
+            const word = frontEl.value.trim();
+            const api = apiEl.value;
+            const language = languageEl.value;
 
             if (!word) {
                 statusEl.textContent = "Please enter a word first.";
                 return;
             }
 
+            getDefinitionBtn.disabled = true;
             statusEl.textContent = "Fetching definition...";
 
-            const response = await fetch("{% url 'get-definition' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify({word, api})
-            });
+            try {
+                const response = await fetch("{% url 'get-definition' %}", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({word, api, language})
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok && data.definition) {
-                backEl.value = data.definition;
-                statusEl.textContent = `Definition loaded from ${api}. You can edit it before saving.`;
-            } else {
-                statusEl.textContent = data.error || "No definition found.";
+                if (response.ok && data.definition) {
+                    backEl.value = data.definition;
+                    statusEl.textContent = `Definition loaded from ${api} (${language}). You can edit it before saving.`;
+                } else {
+                    statusEl.textContent = data.error || "No definition found.";
+                }
+            } catch (error) {
+                statusEl.textContent = "Request failed. Please try again.";
+            } finally {
+                getDefinitionBtn.disabled = false;
             }
         });
     </script>

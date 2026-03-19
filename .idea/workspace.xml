@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Implement admin and deck export">
+    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Use newer Freedictionary API">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cards/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/views/flashcards.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/views/flashcards.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cards/flashcards/bulk_review.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/bulk_review.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cards/flashcards/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/form.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +132,7 @@
       <workItem from="1761484642341" duration="26534000" />
       <workItem from="1771460523471" duration="3180000" />
       <workItem from="1773152203058" duration="12388000" />
-      <workItem from="1773929755815" duration="1573000" />
+      <workItem from="1773929755815" duration="3446000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -234,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773233083580</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Use newer Freedictionary API">
+      <option name="closed" value="true" />
+      <created>1773931356578</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773931356578</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,6 +277,7 @@
     <MESSAGE value="Implement basic decks" />
     <MESSAGE value="Implement authorization" />
     <MESSAGE value="Implement admin and deck export" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement admin and deck export" />
+    <MESSAGE value="Use newer Freedictionary API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Use newer Freedictionary API" />
   </component>
 </project>

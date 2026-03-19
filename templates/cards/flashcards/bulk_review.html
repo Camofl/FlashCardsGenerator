@@ -5,19 +5,36 @@
         <div class="card-body">
             <h1 class="h4 fw-bold mb-3">Review and generate backs</h1>
 
-            <div class="d-flex gap-2 align-items-end mb-3">
-                <div style="width: 260px;">
-                    <label class="form-label">API</label>
-                    <select id="api-select" class="form-select">
+            <div class="row g-2 align-items-end mb-3">
+                <div class="col-sm-6 col-lg-3">
+                    <label for="api-select" class="form-label">API</label>
+                    <select id="api-select" class="form-select"
+                            aria-label="Select dictionary API">
                         <option value="freedictionary" selected>Free Dictionary</option>
-                        <option value="notimp">NotImplemented</option>
                     </select>
                 </div>
 
-                <button type="button" class="btn btn-outline-primary" id="generate-btn">
-                    Generate backs
-                </button>
-                <small id="gen-status" class="text-muted"></small>
+                <div class="col-sm-6 col-lg-3">
+                    <label for="language-select" class="form-label">Language</label>
+                    <select id="language-select" class="form-select"
+                            aria-label="Select dictionary language">
+                        <option value="en" selected>English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-3">
+                    <button type="button" class="btn btn-outline-primary w-100"
+                            id="generate-btn">
+                        Generate backs
+                    </button>
+                </div>
+
+                <div class="col-lg-3">
+                    <small id="gen-status" class="text-muted d-block"></small>
+                </div>
             </div>
 
             <form method="post" id="bulk-form" novalidate>
@@ -54,7 +71,9 @@
                                     {% endfor %}
                                 </td>
 
-                                <td class="text-center">{{ form.hidden|add_class:"form-check-input" }}</td>
+                                <td class="text-center">
+                                    {{ form.hidden|add_class:"form-check-input" }}
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -74,51 +93,74 @@
     <script>
         const statusEl = document.getElementById("gen-status");
         const apiSelect = document.getElementById("api-select");
+        const languageSelect = document.getElementById("language-select");
+        const generateBtn = document.getElementById("generate-btn");
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-        document.getElementById("generate-btn").addEventListener("click", async () => {
+        generateBtn.addEventListener("click", async () => {
             const fronts = Array.from(document.querySelectorAll(".js-front")).map(el => el.value.trim());
             const backs = Array.from(document.querySelectorAll(".js-back"));
             const api = apiSelect.value;
+            const language = languageSelect.value;
 
-            // Only generate for rows where back is empty (keeps user edits)
             const wordsToSend = [];
-            const indexMap = []; // map response index -> form row index
-            fronts.forEach((w, i) => {
-                if (w && !backs[i].value.trim()) {
-                    wordsToSend.push(w);
+            const indexMap = [];
+
+            fronts.forEach((word, i) => {
+                if (word && !backs[i].value.trim()) {
+                    wordsToSend.push(word);
                     indexMap.push(i);
                 }
             });
 
             if (!wordsToSend.length) {
-                statusEl.textContent = "Nothing to generate (all backs already filled).";
+                statusEl.textContent = "Nothing to generate. All backs are already filled.";
                 return;
             }
 
-            statusEl.textContent = `Generating ${wordsToSend.length}...`;
+            generateBtn.disabled = true;
+            statusEl.textContent = `Generating ${wordsToSend.length} definitions...`;
 
-            const resp = await fetch("{% url 'get-definitions-bulk' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify({api, words: wordsToSend})
-            });
+            try {
+                const resp = await fetch("{% url 'get-definitions-bulk' %}", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({
+                        api,
+                        language,
+                        words: wordsToSend
+                    })
+                });
 
-            const data = await resp.json();
+                const data = await resp.json();
 
-            if (!resp.ok || !data.definitions) {
-                statusEl.textContent = data.error || "Generation failed.";
-                return;
+                if (!resp.ok || !Array.isArray(data.definitions)) {
+                    statusEl.textContent = data.error || "Generation failed.";
+                    return;
+                }
+
+                let filledCount = 0;
+
+                data.definitions.forEach((definition, j) => {
+                    const rowIndex = indexMap[j];
+                    if (rowIndex === undefined) return;
+
+                    if (definition) {
+                        backs[rowIndex].value = definition;
+                        filledCount += 1;
+                    }
+                });
+
+                statusEl.textContent = `Done. Filled ${filledCount} backs using ${data.api || api} (${data.language || language}).`;
+            } catch (error) {
+                statusEl.textContent = "Request failed. Please try again.";
+            } finally {
+                generateBtn.disabled = false;
             }
-
-            data.definitions.forEach((def, j) => {
-                const rowIndex = indexMap[j];
-                if (rowIndex !== undefined) backs[rowIndex].value = def || "";
-            });
-
-            statusEl.textContent = `Done. Filled ${data.definitions.length} backs (editable).`;
         });
     </script>
 {% endblock %}

@@ -13,7 +13,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
 
 from ..forms import BulkFlashcardRowForm
 from ..models import Flashcard
-from ..services import DictionaryAPI
+from ..services import DictionaryAPI, DefinitionService, InvalidRequestError, \
+    UnsupportedAPIError
 
 
 class FlashcardListView(ListView):
@@ -73,41 +74,36 @@ class FlashcardDeleteView(OwnerRequiredMixin, DeleteView):
 
 
 class GetDefinitionView(LoginRequiredMixin, View):
+    http_method_names = ["post"]
+
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        word_raw = data.get("word", "").strip()
-        api = data.get("api", "freedictionary")
+        if request.content_type != "application/json":
+            return JsonResponse(
+                {"error": "Unsupported content type. Expected application/json"},
+                status=415,
+            )
 
-        if not word_raw:
-            return JsonResponse({"error": "No word provided"}, status=400)
+        try:
+            payload = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON body"}, status=400)
 
-        definition = fetch_definition_helper(word_raw, api=api)
+        try:
+            definition = DefinitionService.fetch_definition(
+                word_raw=payload.get("word", ""),
+                api=payload.get("api"),
+                language=payload.get("language", "en"),
+            )
+        except InvalidRequestError as exc:
+            return JsonResponse({"error": str(exc)}, status=400)
+        except UnsupportedAPIError as exc:
+            return JsonResponse({"error": str(exc)}, status=400)
 
-        if definition:
-            return JsonResponse({"definition": definition})
-        return JsonResponse({"error": "No definition found"}, status=404)
+        if not definition:
+            return JsonResponse({"error": "No definition found"}, status=404)
 
+        return JsonResponse({"definition": definition})
 
-def get_preferred_pos(word):
-    if word.lower().startswith("to "):
-        preferred_pos = ["verb"]
-        word = word[3:]
-    elif word.lower().startswith("the "):
-        preferred_pos = ["noun"]
-        word = word[4:]
-    else:
-        preferred_pos = ["pronoun", "adjective", "adverb", "preposition",
-                         "conjunction", "interjection"]
-    return word, preferred_pos
-
-
-def fetch_definition_helper(word, api="freedictionary"):
-    word, preferred_pos = get_preferred_pos(word)
-    return DictionaryAPI.get_definition(
-        word=word,
-        api=api,
-        preferred_pos=preferred_pos,
-    )
 
 
 class BulkPasteView(LoginRequiredMixin, View):
@@ -185,21 +181,54 @@ class BulkReviewCreateView(LoginRequiredMixin, View):
 
 
 class BulkGetDefinitionsView(LoginRequiredMixin, View):
+    http_method_names = ["post"]
+
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body or "{}")
-        api = data.get("api", "freedictionary")
-        words = data.get("words", [])
+        if request.content_type != "application/json":
+            return JsonResponse(
+                {"error": "Unsupported content type. Expected application/json"},
+                status=415,
+            )
+
+        try:
+            payload = json.loads(request.body or "{}")
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON body"}, status=400)
+
+        words = payload.get("words", [])
+        api = payload.get("api")
+        language = payload.get("language", "en")
 
         if not isinstance(words, list) or not words:
             return JsonResponse({"error": "No words provided"}, status=400)
 
-        definitions = []
-        for w in words:
-            w = (w or "").strip()
-            if not w:
+        if api and not DictionaryAPI.has_provider(api):
+            return JsonResponse({"error": f"Unsupported API: {api}"}, status=400)
+
+        definitions: list[str] = []
+
+        for raw_word in words:
+            word = (raw_word or "").strip()
+            if not word:
                 definitions.append("")
                 continue
-            definition = fetch_definition_helper(w, api=api)
+
+            try:
+                definition = DefinitionService.fetch_definition(
+                    word_raw=word,
+                    api=api,
+                    language=language,
+                )
+            except InvalidRequestError:
+                definitions.append("")
+                continue
+            except UnsupportedAPIError as exc:
+                return JsonResponse({"error": str(exc)}, status=400)
+
             definitions.append(definition or "")
 
-        return JsonResponse({"definitions": definitions})
+        return JsonResponse({
+            "definitions": definitions,
+            "api": (api or DefinitionService.DEFAULT_API),
+            "language": (language or "en").lower(),
+        })
