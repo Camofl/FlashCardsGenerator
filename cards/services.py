@@ -10,7 +10,7 @@ class DictionaryAPI:
 
 
 class FreeDictionaryAPI:
-    BASE_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+    BASE_URL = "https://freedictionaryapi.com/api/v1/entries/en/"
 
     @staticmethod
     def get_definition(word, preferred_pos=None):
@@ -19,55 +19,67 @@ class FreeDictionaryAPI:
             if r.status_code != 200:
                 return None
 
-            entries = r.json()
-            parts = []
-
-            first_entry = entries[0]
-            phonetic = first_entry.get("phonetic", "")
-            if not phonetic:
-                for phonetic_entry in first_entry.get("phonetics", ""):
-                    if phonetic_entry.get("text", ""):
-                        phonetic = phonetic_entry.get("text", "")
-                        break
-            if phonetic:
-                parts.append(phonetic + "\n")
-
-            all_meanings = []
-            for entry in entries:
-                all_meanings.extend(entry.get("meanings", []))
-
-            filtered_meanings = [
-                                    m for m in all_meanings
-                                    if preferred_pos and m.get(
-                    "partOfSpeech") in preferred_pos
-                                ] or all_meanings
-
-            if not filtered_meanings:
+            data = r.json()
+            entries = data.get("entries", [])
+            if not entries:
                 return None
 
-            for meaning in filtered_meanings:
-                pos = meaning.get("partOfSpeech")
+            parts = []
+
+            pronunciation = ""
+            for p in entries[0].get("pronunciations", []):
+                if p.get("text"):
+                    pronunciation = p["text"]
+                    break
+
+            if pronunciation:
+                parts.append(pronunciation + "\n")
+
+            filtered_entries = [
+                e
+                for e in entries
+                if preferred_pos and e.get("partOfSpeech") in preferred_pos
+            ] or entries
+
+            if not filtered_entries:
+                return None
+
+            for entry in filtered_entries:
+                pos = entry.get("partOfSpeech")
                 if pos:
                     parts.append(f"{pos}:\n")
 
-                for i, d in enumerate(meaning.get("definitions", [])[:3], start=1):
-                    definition = d.get("definition", "")
-                    example = d.get("example")
-                    parts.append(f"{i}. {definition}")
-                    if example:
-                        parts.append(f"   Example: {example}")
+                senses = entry.get("senses", [])
+                for i, sense in enumerate(senses[:3], start=1):
+                    definition = sense.get("definition", "")
+                    if definition:
+                        parts.append(f"{i}. {definition}")
 
-                synonyms = meaning.get("synonyms", [])
+                    examples = sense.get("examples", [])
+                    if examples:
+                        parts.append(f"   Example: {examples[0]}")
+
+                synonyms = entry.get("synonyms", [])
+                if not synonyms:
+                    for sense in senses:
+                        synonyms.extend(sense.get("synonyms", []))
                 if synonyms:
                     parts.append(f"Synonyms: {', '.join(synonyms[:8])}")
-                antonyms = meaning.get("antonyms", [])
+
+                antonyms = entry.get("antonyms", [])
+                if not antonyms:
+                    for sense in senses:
+                        antonyms.extend(sense.get("antonyms", []))
                 if antonyms:
                     parts.append(f"Antonyms: {', '.join(antonyms[:8])}")
 
-            if first_entry.get("sourceUrls"):
-                parts.append(f"\nSource: {first_entry['sourceUrls'][0]}")
+            source_url = data.get("source", {}).get("url")
+            if source_url:
+                parts.append(f"\nSource: {source_url}")
 
             return "\n".join(parts)
 
         except requests.RequestException:
+            return None
+        except (ValueError, TypeError):
             return None
