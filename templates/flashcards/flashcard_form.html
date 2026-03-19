@@ -10,14 +10,33 @@
 
             <form method="post" novalidate id="flashcard-form">
                 {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for e in form.non_field_errors %}
+                            <div>{{ e }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <div class="mb-3">
                     <label for="id_front" class="form-label">Front (Question)</label>
-                    {{ form.front|add_class:"form-control" }}
+                    {{ form.front|add_class:"form-control"|add_error_class:"is-invalid" }}
+                    {% for e in form.front.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>
+                    {% endfor %}
                 </div>
+
                 <div class="mb-3">
                     <label for="id_back" class="form-label">Back (Answer)</label>
                     <div class="d-flex gap-2 align-items-start">
-                        {{ form.back|add_class:"form-control flex-grow-1" }}
+                        <div class="flex-grow-1">
+                            {{ form.back|add_class:"form-control"|add_error_class:"is-invalid" }}
+                            {% for e in form.back.errors %}
+                                <div class="invalid-feedback">{{ e }}</div>
+                            {% endfor %}
+                        </div>
+
                         <div class="d-flex flex-column flex-grow-0"
                              style="flex-basis: 220px;">
                             <select id="api-select" class="form-select mb-2">
@@ -37,8 +56,11 @@
                 </div>
 
                 <div class="mb-3 form-check">
-                    {{ form.hidden|add_class:"form-check-input" }}
+                    {{ form.hidden|add_class:"form-check-input"|add_error_class:"is-invalid" }}
                     <label for="id_hidden" class="form-check-label">Hidden</label>
+                    {% for e in form.hidden.errors %}
+                        <div class="invalid-feedback d-block">{{ e }}</div>
+                    {% endfor %}
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
