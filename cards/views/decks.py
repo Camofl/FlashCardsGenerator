@@ -1,5 +1,11 @@
+import csv
+
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, \
     DeleteView
 
@@ -48,3 +54,29 @@ class DeckDeleteView(DeleteView):
     model = Deck
     template_name = "cards/decks/confirm_delete.html"
     success_url = reverse_lazy("deck-list")
+
+
+@login_required
+def deck_export(request, pk):
+    deck = get_object_or_404(Deck, pk=pk, created_by=request.user)
+    flashcards = deck.flashcards.all()
+    safe_name = slugify(deck.name) or f"deck-{deck.pk}"
+    filename = f"{safe_name}.tsv"
+
+    response = HttpResponse(
+        content_type="text/tab-separated-values; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        },
+    )
+
+    response.write("#separator:Tab\n")
+    response.write(f"#deck:{deck.name}\n")
+    response.write("#columns:Front\tBack\n")
+
+    writer = csv.writer(response, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
+
+    for card in flashcards:
+        writer.writerow([card.front, card.back])
+
+    return response

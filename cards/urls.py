@@ -19,4 +19,5 @@ urlpatterns = [
     path("decks/<int:pk>/", DeckDetailView.as_view(), name="deck-detail"),
     path("decks/<int:pk>/edit", DeckUpdateView.as_view(), name="deck-update"),
     path("decks/<int:pk>/delete", DeckDeleteView.as_view(), name="deck-delete"),
+    path("decks/<int:pk>/export", deck_export, name="deck-export"),
 ]
