@@ -8,6 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
 from django.urls import reverse_lazy
 from .models import Flashcard
 from .services import DictionaryAPI
+import json
 
 
 class FlashcardListView(ListView):
@@ -60,7 +61,6 @@ class FlashcardDeleteView(DeleteView):
 @method_decorator(csrf_exempt, name="dispatch")
 class GetDefinitionView(View):
     def post(self, request, *args, **kwargs):
-        import json
         data = json.loads(request.body)
         word_raw = data.get("word", "").strip()
         api = data.get("api", "freedictionary")
@@ -68,18 +68,17 @@ class GetDefinitionView(View):
         if not word_raw:
             return JsonResponse({"error": "No word provided"}, status=400)
 
-        # --- Detect part(s) of speech ---
-        preferred_pos = []
         word = word_raw
 
         if word_raw.lower().startswith("to "):
             preferred_pos = ["verb"]
-            word = word_raw[3:]  # remove "to "
+            word = word_raw[3:]
         elif word_raw.lower().startswith("the "):
             preferred_pos = ["noun"]
-            word = word_raw[4:]  # remove "the "
+            word = word_raw[4:]
         else:
-            preferred_pos = ["adjective", "adverb"]
+            preferred_pos = ["pronoun", "adjective", "adverb", "preposition",
+                             "conjunction", "interjection"]
 
         definition = DictionaryAPI.get_definition(
             word=word,
