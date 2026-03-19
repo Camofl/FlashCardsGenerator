@@ -1,8 +1,5 @@
 from django.urls import path
-from .views import (
-    FlashcardListView, FlashcardDetailView,
-    FlashcardCreateView, FlashcardUpdateView, FlashcardDeleteView, GetDefinitionView
-)
+from .views import *
 
 urlpatterns = [
     path("", FlashcardListView.as_view(), name="flashcard-list"),
@@ -11,4 +8,9 @@ urlpatterns = [
     path("<int:pk>/edit/", FlashcardUpdateView.as_view(), name="flashcard-update"),
     path("<int:pk>/delete/", FlashcardDeleteView.as_view(), name="flashcard-delete"),
     path("get-definition/", GetDefinitionView.as_view(), name="get-definition"),
+    path("bulk/", BulkPasteView.as_view(), name="flashcard-bulk-paste"),
+    path("bulk/review/", BulkReviewCreateView.as_view(),
+         name="flashcard-bulk-review"),
+    path("bulk/get-definitions/", BulkGetDefinitionsView.as_view(),
+         name="get-definitions-bulk"),
 ]
