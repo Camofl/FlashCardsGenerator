@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}{% if view.object %}Edit Flashcard{% else %}New Flashcard
+{% endif %}{% endblock %}
+
+{% block content %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="h4 fw-bold mb-4">
+                {% if view.object %}Edit Flashcard{% else %}Create New
+                    Flashcard{% endif %}
+            </h1>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_front" class="form-label">Front (Question)</label>
+                    {{ form.front|add_class:"form-control" }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_back" class="form-label">Back (Answer)</label>
+                    {{ form.back|add_class:"form-control" }}
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'flashcard-list' %}"
+                       class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        {% if view.object %}Save Changes{% else %}Create
+                            Flashcard{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
