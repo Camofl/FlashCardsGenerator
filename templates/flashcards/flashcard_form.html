@@ -18,9 +18,9 @@
                     <label for="id_back" class="form-label">Back (Answer)</label>
                     <div class="d-flex gap-2 align-items-start">
                         {{ form.back|add_class:"form-control flex-grow-1" }}
-                        <div class="d-flex flex-column">
-                            <select id="api-select" class="form-select mb-2"
-                                    style="min-width: 150px;">
+                        <div class="d-flex flex-column flex-grow-0"
+                             style="flex-basis: 220px;">
+                            <select id="api-select" class="form-select mb-2">
                                 <option value="freedictionary" selected>Free
                                     Dictionary
                                 </option>

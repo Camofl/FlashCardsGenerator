@@ -1,14 +1,14 @@
+import json
+
 from django import forms
 from django.http import JsonResponse
-from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
-from django.urls import reverse_lazy
+
 from .models import Flashcard
 from .services import DictionaryAPI
-import json
 
 
 class FlashcardListView(ListView):
