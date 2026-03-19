@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Sign up | FlashCards Generator{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold mb-2">Create account</h2>
+                        <p class="text-muted mb-0">Start building your own flashcard
+                            decks.</p>
+                    </div>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}"
+                                       class="form-label">
+                                    {{ field.label }}
+                                </label>
+                                <input
+                                        type="{% if field.name == 'password1' or field.name == 'password2' %}password{% else %}text{% endif %}"
+                                        name="{{ field.html_name }}"
+                                        id="{{ field.id_for_label }}"
+                                        class="form-control {% if field.errors %}is-invalid{% endif %}"
+                                >
+                                {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text|safe }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Sign up
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <p class="text-center mb-0 text-muted">
+                        Already have an account?
+                        <a href="{% url 'login' %}" class="text-decoration-none">
+                            Log in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
