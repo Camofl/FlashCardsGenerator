@@ -21,6 +21,10 @@
                     <label for="id_back" class="form-label">Back (Answer)</label>
                     {{ form.back|add_class:"form-control" }}
                 </div>
+                <div class="mb-3 form-check">
+                    {{ form.hidden|add_class:"form-check-input" }}
+                    <label for="id_hidden" class="form-check-label">Hidden</label>
+                </div>
 
                 <div class="d-flex justify-content-between mt-4">
                     <a href="{% url 'flashcard-list' %}"

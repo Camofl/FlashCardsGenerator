@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Implement redirect to flashcards">
-      <change beforePath="$PROJECT_DIR$/FlashCardsGenerator/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlashCardsGenerator/settings.py" afterDir="false" />
+    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Fix created_by field">
+      <change beforePath="$PROJECT_DIR$/flashcards/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/flashcards/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/flashcards/flashcard_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/flashcards/flashcard_form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/flashcards/flashcard_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/flashcards/flashcard_list.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +115,7 @@
       <option name="presentableId" value="Default" />
       <updated>1760446346198</updated>
       <workItem from="1760446347214" duration="3574000" />
-      <workItem from="1761484642341" duration="8300000" />
+      <workItem from="1761484642341" duration="12470000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -132,7 +133,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761519192002</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Fix created_by field">
+      <option name="closed" value="true" />
+      <created>1761519544174</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1761519544174</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +161,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
     <MESSAGE value="Implement redirect to flashcards" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement redirect to flashcards" />
+    <MESSAGE value="Fix created_by field" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix created_by field" />
   </component>
 </project>
