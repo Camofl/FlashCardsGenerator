@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Add hidden field">
-      <change beforePath="$PROJECT_DIR$/flashcards/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/flashcards/urls.py" afterDir="false" />
+    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Add API call">
+      <change beforePath="$PROJECT_DIR$/flashcards/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/flashcards/services.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flashcards/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/flashcards/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/flashcards/flashcard_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/flashcards/flashcard_form.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +114,7 @@
       <option name="presentableId" value="Default" />
       <updated>1760446346198</updated>
       <workItem from="1760446347214" duration="3574000" />
-      <workItem from="1761484642341" duration="13905000" />
+      <workItem from="1761484642341" duration="18780000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -149,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761603305876</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add API call">
+      <option name="closed" value="true" />
+      <created>1761604759614</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1761604759614</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +178,7 @@
     <MESSAGE value="Implement redirect to flashcards" />
     <MESSAGE value="Fix created_by field" />
     <MESSAGE value="Add hidden field" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add hidden field" />
+    <MESSAGE value="Add API call" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add API call" />
   </component>
 </project>
