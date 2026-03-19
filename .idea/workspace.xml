@@ -4,31 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Show form errors to user">
-      <change afterPath="$PROJECT_DIR$/cards/views/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cards/views/decks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlashCardsGenerator/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlashCardsGenerator/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlashCardsGenerator/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlashCardsGenerator/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/apps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/migrations/0002_rename_side2_flashcard_back_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/migrations/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flashcards/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/views/flashcards.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/flashcards/bulk_paste.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/bulk_paste.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/flashcards/bulk_review.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/bulk_review.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/flashcards/flashcard_confirm_delete.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/confirm_delete.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/flashcards/flashcard_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/flashcards/flashcard_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/flashcards/flashcard_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cards/flashcards/list.html" afterDir="false" />
+    <list default="true" id="ed11928b-de48-428d-8b0d-d92bfa87d49a" name="Changes" comment="Refactor project structure">
+      <change afterPath="$PROJECT_DIR$/templates/cards/decks/confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cards/decks/detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cards/decks/form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cards/decks/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cards/views/decks.py" beforeDir="false" afterPath="$PROJECT_DIR$/cards/views/decks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765851470801</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Refactor project structure">
+      <option name="closed" value="true" />
+      <created>1765922260125</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1765922260125</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,6 +234,7 @@
     <MESSAGE value="Cleanup and bug fix" />
     <MESSAGE value="Add phonetic fallback" />
     <MESSAGE value="Show form errors to user" />
-    <option name="LAST_COMMIT_MESSAGE" value="Show form errors to user" />
+    <MESSAGE value="Refactor project structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor project structure" />
   </component>
 </project>

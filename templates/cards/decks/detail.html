@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{{ deck.name }}{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-0">{{ deck.name }}</h1>
+            <div class="text-muted small">Author: {{ deck.created_by }}</div>
+        </div>
+        <div>
+            {% if deck.created_by == None or deck.created_by == request.user %}
+                <a href="{% url 'deck-update' deck.pk %}"
+                   class="btn btn-outline-primary btn-sm">Edit deck</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0 align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">Front</th>
+                    <th scope="col">Back</th>
+                    <th scope="col">Author</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for flashcard in flashcards %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'flashcard-detail' flashcard.pk %}"
+                               class="text-decoration-none">
+                                {{ flashcard.front }}
+                            </a>
+                        </td>
+                        <td>{{ flashcard.back|truncatewords:20 }}</td>
+                        <td>{{ flashcard.created_by }}</td>
+                        <td class="text-end">
+                            {% if flashcard.created_by == None or flashcard.created_by == request.user %}
+                                <a href="{% url 'flashcard-update' flashcard.pk %}"
+                                   class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <a href="{% url 'flashcard-delete' flashcard.pk %}"
+                                   class="btn btn-sm btn-outline-danger">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No flashcards in this deck.
+                            <a href="{% url 'deck-update' deck.pk %}">Add some</a>.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

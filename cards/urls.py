@@ -1,5 +1,6 @@
 from django.urls import path
 from .views.flashcards import *
+from .views.decks import *
 
 urlpatterns = [
     path("", FlashcardListView.as_view(), name="flashcard-list"),
@@ -13,4 +14,9 @@ urlpatterns = [
          name="flashcard-bulk-review"),
     path("bulk/get-definitions/", BulkGetDefinitionsView.as_view(),
          name="get-definitions-bulk"),
+    path("decks/", DeckListView.as_view(), name="deck-list"),
+    path("decks/new", DeckCreateView.as_view(), name="deck-create"),
+    path("decks/<int:pk>/", DeckDetailView.as_view(), name="deck-detail"),
+    path("decks/<int:pk>/edit", DeckUpdateView.as_view(), name="deck-update"),
+    path("decks/<int:pk>/delete", DeckDeleteView.as_view(), name="deck-delete"),
 ]

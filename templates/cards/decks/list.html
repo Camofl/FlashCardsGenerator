@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}All Decks{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold mb-0">All Decks</h1>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0 align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Cards</th>
+                    <th scope="col">Author</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for deck in decks %}
+                    {% if not deck.hidden  or deck.created_by == request.user %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'deck-detail' deck.pk %}"
+                                   class="text-decoration-none">
+                                    {{ deck.name }}
+                                </a>
+                            </td>
+                            <td>{{ deck.flashcards|truncatewords:20 }}</td>
+                            <td>{{ deck.created_by }}</td>
+                            <td class="text-end">
+                                {% if deck.created_by == None or deck.created_by == request.user %}
+                                    <a href="{% url 'deck-update' deck.pk %}"
+                                       class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                    <a href="{% url 'deck-delete' deck.pk %}"
+                                       class="btn btn-sm btn-outline-danger">Delete</a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                            No decks found. <a href="{% url 'deck-create' %}">Create
+                            one</a>.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

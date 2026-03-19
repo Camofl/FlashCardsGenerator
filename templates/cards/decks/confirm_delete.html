@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Delete Deck{% endblock %}
+
+{% block content %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="h4 fw-bold mb-3 text-danger">Delete Deck</h1>
+            <p>Are you sure you want to delete the deck
+                <strong>"{{ deck.name }}"</strong>?</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'deck-list' %}"
+                       class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-danger">Yes, delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
