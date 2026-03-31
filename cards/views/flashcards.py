@@ -46,7 +46,7 @@ class FlashcardCreateView(LoginRequiredMixin, CreateView):
         flashcard.created_by = self.request.user
 
         if not flashcard.back and flashcard.front:
-            definition = DictionaryAPI.get_definition(flashcard.front, api="wordsapi")
+            definition = DictionaryAPI.get_definition(flashcard.front)
             if definition:
                 flashcard.back = definition
             else:
